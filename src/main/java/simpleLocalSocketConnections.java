@@ -1,7 +1,7 @@
 import java.io.IOException;
 import java.net.*;
 
-public class main {
+public class simpleLocalSocketConnections {
 
     public static void main(String[] args) {
         try {
