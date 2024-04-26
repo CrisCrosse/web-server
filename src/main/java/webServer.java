@@ -17,15 +17,17 @@ public class webServer {
             // set up a writer to send data across the new connection
             PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
 
-
-
+            // respond to connection and output to console the request
             out.println("HTTP/1.1 200 OK\r\n\r\n You have established a connection with Chris' Web Server");
-            System.out.println(in.readLine());
 
-            while (in.readLine() != null){
-                out.println("hi client");
-                System.out.println(in.readLine());
-            }
+
+            // parse the HTTP request for the desired endpoint
+            String input = in.readLine();
+            System.out.println(input);
+            String[] splitInput = input.split(" ");
+
+            out.println("Requested path: " + splitInput[1]);
+
 
             server.close();
 
