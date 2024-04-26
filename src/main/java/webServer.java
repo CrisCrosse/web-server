@@ -26,7 +26,13 @@ public class webServer {
             System.out.println(input);
             String[] splitInput = input.split(" ");
 
-            out.println("Requested path: " + splitInput[1]);
+            String retrievalPath = splitInput[1];
+            String requestType = splitInput[0];
+
+            // call file reader func on requested path
+            if (requestType.equals("GET")){
+                out.println("Requested path: " + splitInput[1] + "\nRequest type: " + requestType);
+            }
 
 
             server.close();
