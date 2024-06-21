@@ -9,6 +9,7 @@ public class ReadFile {
 
             //create new File object
             File fileToRead = new File(path);
+            System.out.println("Reading file located at: ");
             System.out.println(fileToRead.getAbsolutePath());
 
             // create String from lines of file
@@ -21,7 +22,7 @@ public class ReadFile {
             fileScanner.close();
         } catch (Exception e){
             System.out.println(e);
-            System.out.println("An error occurred.");
+            System.out.println("An error occurred within ReadFile.");
             e.printStackTrace();
         }
         return outputSB;
