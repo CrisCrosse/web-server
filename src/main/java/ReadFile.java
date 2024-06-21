@@ -1,7 +1,4 @@
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-import java.net.URL;
 import java.util.Scanner;
 
 public class ReadFile {
@@ -27,24 +24,10 @@ public class ReadFile {
             System.out.println("An error occurred.");
             e.printStackTrace();
         }
-
-
         return outputSB;
     };
 
     public static void main(String[] args) {
-//        try {
-//            File myObj = new File("filename.txt");
-//            Scanner myReader = new Scanner(myObj);
-//            while (myReader.hasNextLine()) {
-//                String data = myReader.nextLine();
-//                System.out.println(data);
-//            }
-//           v
-//        } catch (FileNotFoundException e) {
-//            System.out.println("An error occurred.");
-//            e.printStackTrace();
-//        }
         System.out.println(ReadFile.readFileAtPath("./src/main/www/index.html"));
     }
 }
