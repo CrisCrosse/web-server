@@ -1,11 +1,12 @@
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 public class ReadFile {
 
-    final public static StringBuilder readFileAtPath(String path){
+    final public static StringBuilder readFileAtPath(String path) throws FileNotFoundException {
         StringBuilder outputSB = new StringBuilder();
-        try{
+//        try{
 
             //create new File object
             File fileToRead = new File(path);
@@ -20,15 +21,15 @@ public class ReadFile {
                 outputSB.append(data);
             }
             fileScanner.close();
-        } catch (Exception e){
-            System.out.println(e);
-            System.out.println("An error occurred within ReadFile.");
-            e.printStackTrace();
-        }
+//        } catch (Exception e){
+//            System.out.println(e);
+//            System.out.println("An error occurred within ReadFile.");
+//            e.printStackTrace();
+//        }
         return outputSB;
     };
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotFoundException {
         System.out.println(ReadFile.readFileAtPath("./src/main/www/index.html"));
     }
 }

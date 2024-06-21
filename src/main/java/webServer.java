@@ -59,10 +59,12 @@ public class webServer {
                         out.println(fileResponse);
                         clientSocket.close();
                     } catch (Exception e){
-                        //out.println("An error occurred.");
-                        //out.println(e);
-                        //out.println("Closing connection ...");
-                        //System.out.println("An error occurred.");
+                        out.println("An error occurred.");
+                        System.out.println("An error occurred.");
+                        out.println(e);
+                        System.out.println(e);
+                        out.println("Closing connection ...");
+                        System.out.println("Closing connection ...");
                         server.close();
                         break;
                     }
