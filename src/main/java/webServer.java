@@ -15,6 +15,9 @@ public class webServer extends ServerSocket {
     public webServer(int port) throws IOException {
         super(port);
         this.port = port;
+    }
+
+    public void run(){
         try {
             this.acceptConnection();
         } catch (Exception e){
@@ -23,7 +26,6 @@ public class webServer extends ServerSocket {
             );
             System.out.println(e);
             System.out.println("Closing connection ...");
-            this.close();
         }
         try {
             this.handleRequest();
@@ -33,7 +35,6 @@ public class webServer extends ServerSocket {
             );
             System.out.println(e);
             System.out.println("Closing connection ...");
-            this.close();
         }
     }
 
@@ -52,7 +53,9 @@ public class webServer extends ServerSocket {
     }
 
     private void handleRequest() throws IOException {
-//        this.writeOutToClient.println("HTTP/1.1 200 OK\r\n\r\n You have established a connection with Chris' Web Server");
+        // pull out the reading of the request into a separate function, pass endpoint in to handle request
+        // in top level function have conditional if, only if GET call ReadFile
+
         String request = this.takeInputFromClient.readLine();
         System.out.println("Request received: ");
         String[] splitInput = request.split(" ");
@@ -64,26 +67,23 @@ public class webServer extends ServerSocket {
         System.out.println("HTTP version: " + httpVersion);
         System.out.println();
 
+        // make a function that only handles the errors for if a file is found or not -->
+        // better to defensively program and not throw the errors?
         if (requestType.equals("GET")){
             try {
-                StringBuilder fileResponse = ReadFile.readFileAtPath("./src/main/www" + retrievalPath);
-                if (fileResponse.toString().equals("")){
-                    this.writeOutToClient.println("HTTP/1.1 404 Not Found\r\n\r\n");
-                    this.writeOutToClient.println("The requested file was not found.");
-                    this.writeOutToClient.println("Closing connection ...");
-                    this.close();
-                } else {
-                    this.writeOutToClient.println("HTTP/1.1 200 OK\r\n\r\n");
-                }
+                ReadFile.printFileAtPathToClient("./src/main/www" + retrievalPath, this.writeOutToClient);
+//                StringBuilder fileResponse = ReadFile.readFileAtPath("./src/main/www" + retrievalPath);
+//                this.writeOutToClient.println("HTTP/1.1 200 OK\r\n\r\n " + fileResponse);
                 client.close();
+
             } catch (Exception e){
-                this.writeOutToClient.println("An error occurred.");
+                this.writeOutToClient.println("HTTP/1.1 404 Not Found\r\n\r\n");
                 System.out.println("An error occurred.");
-                this.writeOutToClient.println(e);
+                this.writeOutToClient.println("Invalid file path requested. Try /index.html");
                 System.out.println(e);
                 this.writeOutToClient.println("Closing connection ...");
-                System.out.println("Closing connection ...");
-                this.close();
+                System.out.println("Closing client connection ...");
+                client.close();
             }
         }
     }
@@ -95,7 +95,10 @@ public class webServer extends ServerSocket {
 
     public static void main(String[] args) throws IOException {
 
-        new webServer(80);
+        webServer myServer = new webServer(80);
+        myServer.run();
+        myServer.close();
+
 
 //
 //        try {
