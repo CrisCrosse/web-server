@@ -1,56 +1,22 @@
-import org.junit.Test;
-
+import org.junit.jupiter.api.Test;
 import java.io.IOException;
+import java.net.Socket;
 
-import static org.junit.Assert.*;
-public class testWebServer {
+import static org.mockito.Mockito.*;
 
-    @Test
-    public void testWebServerCreation() throws IOException {
-        // web server creation is currently doing too much, creating socket, accepting and closing connection
-
-        webServer testServer = new webServer(80);
-        assertNotNull(testServer);
-    }
+class WebServerTest {
 
     @Test
-    public void testWebServerAcceptsConnection() throws IOException {
-        webServer testServer = new webServer(80);
-        //HTTP request
-        //assertNotNull(testServer.client);
-    }
+    void testAcceptTenRequests() throws IOException, InterruptedException {
+        // ideally would not have to make these private methods package private just for the sake of testing?
 
-    public void testWebServerHandlesValidRequest() throws IOException {
-        webServer testServer = new webServer(80);
-        //HTTP request to correct endpoint
+        WebServer mockServer = spy(new WebServer(80));
+        doNothing().when(mockServer).handleRequest(any());
+        doReturn(new Socket()).when(mockServer).acceptConnection();
 
-        // assert that the 200 response is sent along with the correct HTML file
-        //assertNotNull(testServer.takeInputFromClient);
-    }
+        mockServer.acceptTenRequests();
 
-    public void testWebServerHandlesInvalidRequest() throws IOException {
-        webServer testServer = new webServer(80);
-        //HTTP request to incorrect endpoint
-
-        // assert that the 404 response is sent along
-        //assertNotNull(testServer.takeInputFromClient);
-    }
-
-
-    @Test
-    public void testReadFileReturnsWholeHTMLFile() throws IOException {
-        StringBuilder testFile = ReadFile.readFileAtPath("./src/test/www/testIndex.html");
-        //System.out.println(testFile.toString());
-        // readfile as testFile is not formatted nicely? can this be passed through as a string?
-        assertEquals("<!DOCTYPE html>" +
-                "<html>" +
-                "<head>" +
-                "    <title>Test Page</title>" +
-                "</head>" +
-                "<body>" +
-                "    <h1>This is a test page</h1>" +
-                "    <p>It is being served by a Java web server.</p>" +
-                "</body>" +
-                "</html>", testFile.toString());
+        verify(mockServer, times(10)).acceptConnection();
+        verify(mockServer, times(10)).handleRequest(any());
     }
 }

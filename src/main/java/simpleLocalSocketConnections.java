@@ -14,8 +14,9 @@ public class simpleLocalSocketConnections {
             ServerSocket server = new ServerSocket(80);
             Thread newThread = new Thread(() -> {
                 try {
-                    Socket acceptedSocket = server.accept();
                     System.out.println("Waiting for connection");
+                    Socket acceptedSocket = server.accept();
+                    System.out.println("connection established in thread");
                     try {
                         Thread.sleep(5 * 1000);
                     } catch (InterruptedException ie) {
@@ -24,15 +25,14 @@ public class simpleLocalSocketConnections {
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
-                System.out.println("connection established");
             });
             newThread.start();
 
             //System.out.println(acceptedSocket);
             //System.out.println(server);
             Socket client = new Socket("localHost", 80);
-            //System.out.println(client);
-            //System.out.println("connection established");
+            System.out.println(client);
+            System.out.println("connection established");
         } catch (UnknownHostException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {
