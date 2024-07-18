@@ -21,8 +21,9 @@ public class ServerIO {
         respondToConnection(endpoint);
     }
     // seems the below 2 functions should be in the constructor
-    // but that makes it hard to test because I want to instantiate a spy and then stub these
+    // but that makes it hard to test because I want to instantiate a spy initially and then stub these
     // methods to set mocks as the things that take the input and output of logic from the class
+    // if they are in the constructor then it automatically creates the input and output streams before i can mock it
     public void createInputAndOutputStreamsWithClient() throws IOException {
         this.takeInputFromClient = getTakeInputFromClient();
         this.writeOutToClient = getWriteOutToClient();
@@ -41,7 +42,7 @@ public class ServerIO {
     }
 
     public void respondToConnection(String endpoint) throws IOException {
-        // this error cannot be caught in the webServer class, as needs to write out to the client with the failure
+        // error handling transmission to the client must be done in this class, but errors are passed up to WebServer to be handled for the server
         try {
             StringBuilder file = fileReader.readFileAtPath("./src/main/www" + endpoint);
             writeOutToClient.println("HTTP/1.1 200 OK\r\n\r\n");
