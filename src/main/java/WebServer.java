@@ -21,46 +21,19 @@ public class WebServer extends ServerSocket {
         while (requestCount < 5){
             client = this.listenForConnection();
             threadHandleRequest();
+            // it only gets to the next iteration after the thread has finished
             requestCount++;
         }
     }
     public void threadHandleRequest(){
-        // a server socket queues connection requests,
-        // so we need a way of listening and distributing the connection details to threads
+        // this function creates a thread and passes the client to it to handle the request
         thread_count++;
         int this_thread_id = thread_count;
         Runnable runServer = new RunServer(this_thread_id, client);
-        new Thread(runServer).start();
-        // this will spin up a new thread which will execute the request
-    }
 
-//    public void listenHandleCloseConnection(int thread_id) throws InterruptedException {
-//        try {
-//            client = this.listenForConnection();
-//        } catch (IOException | InterruptedException e){
-//            System.out.printf("An error occurred in thread %d while listening for a connection to the web server on port %d.", thread_id, this.port);
-//            System.out.println(e);
-//        }
-//        if (client == null){
-//            System.out.println("Client socket is null, skipping request.");
-//            requestCount ++;
-//        }
-//        TimeUnit.SECONDS.sleep(3);
-//
-//        try {
-//            this.handleRequest(client);
-//        } catch (IOException e){
-//            System.out.println("An error occurred handling the request.");
-//            System.out.println(e);
-//        }
-//        try {
-//            client.close();
-//        } catch (IOException e){
-//            System.out.println("An error occurred closing the connection.");
-//            System.out.println(e);
-//        }
-//        requestCount++;
-//    }
+        new Thread(runServer).start();
+        System.out.println("The threadHandleRequest function has finished");
+    }
 
     Socket listenForConnection() throws IOException, InterruptedException {
             System.out.println("Listening for connection on port 80....");
@@ -80,14 +53,7 @@ public class WebServer extends ServerSocket {
             return client;
     }
 
-//    void handleRequest(Socket client) throws IOException {
-//        // this function will handle the request from the client by instantiating a ServerIO object and calling the respondToConnection method
-//        ServerIO serverIO = new ServerIO(client);
-//        serverIO.handleRequest();
-//    }
-
     public static void main(String[] args) throws IOException, InterruptedException {
-
         WebServer myServer = new WebServer(80);
         myServer.runServer();
 
