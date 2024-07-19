@@ -4,19 +4,16 @@ import java.net.Socket;
 
 import static org.mockito.Mockito.*;
 
-class WebServerTest {
+class testWebServer {
+    @Test
+    void testRunServer() throws IOException, InterruptedException {
+        WebServer mockServer = spy(new WebServer(80));
+        doNothing().when(mockServer).threadHandleRequest();
+        doReturn(new Socket()).when(mockServer).listenForConnection();
 
-//    @Test
-//    void testAcceptTenRequests() throws IOException, InterruptedException {
-//        // ideally would not have to make these private methods package private just for the sake of testing?
-//
-//        WebServer mockServer = spy(new WebServer(80));
-//        doNothing().when(mockServer).handleRequest(any());
-//        doReturn(new Socket()).when(mockServer).listenForConnection();
-//
-//        mockServer.acceptARequest();
-//
-//        verify(mockServer, times(10)).listenForConnection();
-//        verify(mockServer, times(10)).handleRequest(any());
-//    }
+        mockServer.runServer();
+
+        verify(mockServer, times(5)).listenForConnection();
+        verify(mockServer, times(5)).threadHandleRequest();
+    }
 }

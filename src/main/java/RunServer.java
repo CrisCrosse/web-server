@@ -11,17 +11,17 @@ public class RunServer implements Runnable {
     };
 
     void handleRequest(Socket client) throws IOException {
-        // this function will handle the request from the client by instantiating a ServerIO object and calling the respondToConnection method
         ServerIO serverIO = new ServerIO(client);
-        serverIO.handleRequest();
+        serverIO.readAndRespondToRequest();
     }
 
     @Override
     public void run() {
         System.out.println("Thread " + thread_id + " is starting");
+        System.out.println();
 
         try {
-            Thread.sleep(10 * 1000);
+            Thread.sleep(3 * 1000);
         } catch (InterruptedException e) {
             System.out.printf("Thread %d was interrupted", thread_id);
             System.out.println(e);
@@ -42,6 +42,6 @@ public class RunServer implements Runnable {
             System.out.println(e);
         }
 
-        System.out.println("Thread " + thread_id + " has finished");
+        System.out.println("Thread " + thread_id + " has finished \n");
     }
 }

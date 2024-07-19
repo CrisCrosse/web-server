@@ -3,10 +3,8 @@ import java.net.Socket;
 
 public class ServerIO {
     final private Socket client;
-
     private BufferedReader takeInputFromClient;
     private PrintWriter writeOutToClient;
-
     private ReadFile fileReader;
 
     public ServerIO(Socket client) throws IOException {
@@ -14,7 +12,7 @@ public class ServerIO {
     }
 
     // a function which creates the input and output streams with the client, parses the request, then responds to the connection
-    public void handleRequest() throws IOException {
+    public void readAndRespondToRequest() throws IOException {
         createInputAndOutputStreamsWithClient();
         createFileReader();
         String endpoint = parseRequest();
@@ -42,14 +40,14 @@ public class ServerIO {
     }
 
     public void respondToConnection(String endpoint) throws IOException {
-        // error handling transmission to the client must be done in this class, but errors are passed up to WebServer to be handled for the server
+        // error handling transmission to the client must be done in this class, but errors are passed up to WebServer to be handled for the main server
         try {
             StringBuilder file = fileReader.readFileAtPath("./src/main/www" + endpoint);
             writeOutToClient.println("HTTP/1.1 200 OK\r\n\r\n");
             writeOutToClient.println(file);
         } catch (FileNotFoundException e) {
             writeOutToClient.println("HTTP/1.1 404 Not Found\r\n\r\n");
-            writeOutToClient.println("File not found \r\n\r\n");
+            writeOutToClient.println("File not found");
             throw new FileNotFoundException("File not found at requested endpoint");
         }
     }
@@ -57,8 +55,8 @@ public class ServerIO {
     private String parseRequest() throws IOException {
         String request = this.takeInputFromClient.readLine();
         String[] splitInput = request.split(" ");
-        String retrievalPath = splitInput[1];
         String requestType = splitInput[0];
+        String retrievalPath = splitInput[1];
 
         if (requestType.equals("GET")) {
             if (retrievalPath.equals("/")) {

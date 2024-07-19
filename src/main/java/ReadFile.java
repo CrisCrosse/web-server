@@ -9,9 +9,6 @@ public class ReadFile {
         File fileToRead = new File(path);
         Scanner fileScanner = new Scanner(fileToRead);
 
-        System.out.println("Reading file located at: ");
-        System.out.println(fileToRead.getAbsolutePath());
-
         while (fileScanner.hasNextLine()) {
             String data = fileScanner.nextLine();
             outputSB.append(data);
