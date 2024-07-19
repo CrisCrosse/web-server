@@ -8,12 +8,12 @@ class testWebServer {
     @Test
     void testRunServer() throws IOException, InterruptedException {
         WebServer mockServer = spy(new WebServer(80));
-        doNothing().when(mockServer).threadHandleRequest();
+        doNothing().when(mockServer).createThreadToHandleRequest();
         doReturn(new Socket()).when(mockServer).listenForConnection();
 
         mockServer.runServer();
 
         verify(mockServer, times(5)).listenForConnection();
-        verify(mockServer, times(5)).threadHandleRequest();
+        verify(mockServer, times(5)).createThreadToHandleRequest();
     }
 }

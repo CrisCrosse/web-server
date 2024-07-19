@@ -2,6 +2,8 @@ import java.io.IOException;
 import java.net.Socket;
 
 public class RunServer implements Runnable {
+    // this class manages error handling within the thread and instantiates
+    // the serverIO object to respond to the client connection passed down to the thread
     int thread_id;
     Socket client;
 
