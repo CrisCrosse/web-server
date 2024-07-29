@@ -7,7 +7,7 @@ import static org.mockito.Mockito.*;
 
 class TestReadFile {
     @Test
-    void testReadFileatPath() throws IOException {
+    void testReadFileAtPath() throws IOException {
         // when readFileAtPath is called with a valid path
         ReadFile readFileSpy = spy(new ReadFile());
         StringBuilder outputSB;
