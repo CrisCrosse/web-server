@@ -19,6 +19,7 @@ public class RunServer implements Runnable {
 
     @Override
     public void run() {
+        // could move this to a separate class
         System.out.println("Thread " + thread_id + " is starting");
         System.out.println();
 

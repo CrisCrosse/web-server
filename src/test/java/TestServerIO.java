@@ -1,10 +1,12 @@
 import org.junit.jupiter.api.Test;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 class TestServerIO {
@@ -39,11 +41,51 @@ class TestServerIO {
 
     }
     @Test
-    void testRespondToConnectionParseFailure(){
+    void testInvalidRequestTypeParseFailure() throws IOException {
 
+        BufferedReader stubbedBufferedReader = mock(BufferedReader.class);
+        PrintWriter stubbedPrintWriter = mock(PrintWriter.class);
+        ReadFile stubbedReadFile = mock(ReadFile.class);
+        ServerIO serverIOspy = spy(new ServerIO(new Socket()));
+
+        String invalidRequest = "PUT / HTTP/1.1";
+
+        doReturn(stubbedBufferedReader).when(serverIOspy).getTakeInputFromClient();
+        doReturn(stubbedPrintWriter).when(serverIOspy).getWriteOutToClient();
+        doReturn(stubbedReadFile).when(serverIOspy).getFileReader();
+
+        doReturn(invalidRequest).when(stubbedBufferedReader).readLine();
+
+        try {
+            serverIOspy.readAndRespondToRequest();
+        } catch (IOException e) {
+            assertEquals("Invalid request type", e.getMessage());
+        }
+        verify(stubbedPrintWriter).println("HTTP/1.1 404 Not Found\r\n\r\n");
+        verify(stubbedPrintWriter).println("Invalid request type \r\n\r\n");
     }
     @Test
-    void testRespondToConnectionFileFailure(){
+    void testRespondToConnectionFileFailure() throws IOException {
 
+        BufferedReader stubbedBufferedReader = mock(BufferedReader.class);
+        PrintWriter stubbedPrintWriter = mock(PrintWriter.class);
+        ServerIO serverIOspy = spy(new ServerIO(new Socket()));
+
+        String invalidRequest = "GET /../../passwords HTTP/1.1";
+        StringBuilder fileContents = new StringBuilder("File contents");
+
+        doReturn(stubbedBufferedReader).when(serverIOspy).getTakeInputFromClient();
+        doReturn(stubbedPrintWriter).when(serverIOspy).getWriteOutToClient();
+
+        doReturn(invalidRequest).when(stubbedBufferedReader).readLine();
+
+        try {
+            serverIOspy.readAndRespondToRequest();
+        } catch (FileNotFoundException e) {
+            assertEquals("File not found at requested endpoint", e.getMessage());
+        }
+        verify(stubbedPrintWriter).println("HTTP/1.1 404 Not Found\r\n\r\n");
+        verify(stubbedPrintWriter).println("File not found");
     }
+
 }

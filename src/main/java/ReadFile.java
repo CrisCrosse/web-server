@@ -12,14 +12,16 @@ public class ReadFile {
         while (fileScanner.hasNextLine()) {
             String data = fileScanner.nextLine();
             outputSB.append(data);
-            outputSB.append("\n");
+            if (fileScanner.hasNextLine())
+                outputSB.append("\n");
         }
 
         fileScanner.close();
         return outputSB;
     }
     public static void main(String[] args) throws FileNotFoundException {
-         ReadFile readFile = new ReadFile();
+        ReadFile readFile = new ReadFile();
         System.out.println(readFile.readFileAtPath("./src/main/www/index.html"));
+        System.out.println(readFile.readFileAtPath("./src/test/www//../testNaughtyIndex.html"));
     }
 }

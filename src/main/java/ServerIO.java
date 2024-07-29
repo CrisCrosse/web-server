@@ -46,6 +46,7 @@ public class ServerIO {
             writeOutToClient.println("HTTP/1.1 200 OK\r\n\r\n");
             writeOutToClient.println(file);
         } catch (FileNotFoundException e) {
+            // have an error handling class to handle client errors, throw a client file error here
             writeOutToClient.println("HTTP/1.1 404 Not Found\r\n\r\n");
             writeOutToClient.println("File not found");
             throw new FileNotFoundException("File not found at requested endpoint");
@@ -64,6 +65,7 @@ public class ServerIO {
             }
             return retrievalPath;
         } else {
+            //  throw a client request error here
             writeOutToClient.println("HTTP/1.1 404 Not Found\r\n\r\n");
             writeOutToClient.println("Invalid request type \r\n\r\n");
             throw new IOException("Invalid request type");
